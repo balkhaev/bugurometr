@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html id="root">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bugurt NLP</title>
+  <link rel="stylesheet" href="/assets/bulma.min.css">
+  <script defer src="/assets/all.js"></script>
+  <style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      transition: background .3s;
+    }
+
+    #form {
+      margin-bottom: 16px;
+    }
+
+    .column {
+      max-width: 50%;
+    }
+
+    .column .card {
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Bugurtometr
+        </h1>
+        <h2 class="subtitle">
+          Проверь свой пукан
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <form action="/emotion" method="post" id="form">
+        <textarea class="textarea" id="textarea"></textarea>
+      </form>
+
+      <div class="columns mt-3">
+        <div class="column">
+          <div class="card">
+            <div class="card-content">
+              <h6 class="title is-4">Тон текста</h6>
+              <div class="content">
+                <div id="analyze"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <div class="card-content">
+              <p class="title is-4">Лемматизация</p>
+              <div class="content">
+                <div id="lemma"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+  <script src="/assets/json-formatter.umd.min.js"></script>
+  <script>
+    textarea.addEventListener('input', async e => {
+      if (textarea.value === '') {
+        root.style.background = '';
+        analyze.textContent = '';
+        lemma.textContent = '';
+        return;
+      }
+
+      const { lemmas, morphed, emotion } = await fetch(`/analyze?text=${textarea.value}`).then(res => res.json());
+
+      const lemmasFormatter = new JSONFormatter(lemmas, 1);
+      const emotionFormatter = new JSONFormatter(emotion, Infinity);
+
+      const isNegative = emotion.comparative < 0;
+      const bgColor = isNegative ? '244, 67, 54' : '0, 209, 178'
+      const comparative = (Math.abs(emotion.comparative) / 10);
+
+      root.style.background = `rgba(${bgColor}, ${comparative})`;
+      analyze.innerHTML = '';
+      analyze.appendChild(emotionFormatter.render());
+      lemma.innerHTML = '';
+      lemma.appendChild(lemmasFormatter.render());
+    })
+  </script>
+</body>
+
+</html>

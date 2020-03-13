@@ -1,0 +1,27 @@
+{
+  "name": "emotion",
+  "version": "0.0.0",
+  "description": "Emotion detect",
+  "main": "server.js",
+  "dependencies": {
+    "az": "^0.2.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fuse.js": "^3.4.6",
+    "ibm-watson": "^5.4.0",
+    "natural": "^0.6.3",
+    "node-nlp": "^4.2.1",
+    "paralleldots": "^3.2.4",
+    "phpmorphy": "^2.3.1",
+    "sentiment": "^5.0.2",
+    "stopword": "^0.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
